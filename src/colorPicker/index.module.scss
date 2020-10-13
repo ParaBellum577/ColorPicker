@@ -1,0 +1,61 @@
+.picker {
+    width: 300px;
+    height: 54px;
+    border: 3px solid #a0abba;
+    padding: 10px;
+    margin: 0 auto;
+    margin-top: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    > div {
+        color: #949698;
+    }
+};
+.blockButtons {
+    display: flex;
+    > div {
+        margin-right: 10px;
+    }
+};
+.popover {
+    width: 220px;
+    background: #fff;
+    padding: 10px;
+    border: 1px solid #8a9399;
+};
+.popoverButton {
+    width: 20px;
+    height: 20px;
+};
+.color {
+    border: 1px solid #a0abba;
+    width: 20px;
+    height: 20px;
+};
+.popoverColors {
+    height: 30px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.14s ease-in-out;
+    > span {
+        border: 1px solid #a0abba;
+        width: 20px;
+        height: 20px;
+    }
+    &:hover {
+        background-color: #dce2eb;
+    }
+};
+.sliders {
+    display: flex;
+    display: flex;
+    align-items: center;
+    > span {
+        margin-right: 10px;
+    }
+};
