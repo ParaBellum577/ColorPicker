@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Slider from 'react-rangeslider';
 import styles from './index.module.scss';
 import 'react-rangeslider/lib/index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const SliderComponent = function({ color, handleChange, data }) {
+export default function SliderComponent ({ color, handleChange, data }) {
   const [volume, setVolume] = React.useState(data);
   const  handleOnChange = (value) => {
     setVolume(value);
@@ -28,4 +29,8 @@ const SliderComponent = function({ color, handleChange, data }) {
     )
 };
 
-export default SliderComponent;
+SliderComponent.propTypes = {
+  color: PropTypes.string.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  data: PropTypes.number.isRequired,
+};

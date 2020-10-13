@@ -1,5 +1,5 @@
 import React,{ useEffect, useState, memo } from 'react';
-import { Popover, PopoverBody } from 'reactstrap';
+import { Popover, OverlayTrigger, Button } from 'react-bootstrap';
 import SliderComponent from './slider';
 import styles from './index.module.scss';
 
@@ -12,9 +12,7 @@ const ColorPicker = function() {
       {color: "GREEN", value: '#00ff00', rgb: '0.255.0'},
       {color: "BLUE", value: '#0000ff', rgb: '0.0.255'},
   ];
-  const [colorValue, setColorValue] = useState('#000000');
-  const [popoverOneOpen, setPopoverOneOpen] = useState(false);
-  const [popoverOpen, setPopoverOpen] = useState(false);
+  const [value, setValue] = useState('#000000');
   const [R, setR] = useState(0);
   const [G, setG] = useState(0);
   const [B, setB] = useState(0);
@@ -32,23 +30,24 @@ const ColorPicker = function() {
       const red = rgbToHex(r);
       const green = rgbToHex(g);
       const blue = rgbToHex(b);
-      return setColorValue('#'+red+green+blue);
+      return setValue('#'+red+green+blue);
     };
     const RGB = [];
     RGB.push(R,G,B);
     fullColorHex(RGB[0],RGB[1],RGB[2]);
-  }, [R,G,B, colorValue]);
+  }, [R,G,B, value]);
 
-  const toggleOne = () => setPopoverOneOpen(!popoverOneOpen);
-  const toggle = () => setPopoverOpen(!popoverOpen);  
+  const handleClose = () => {
+    document.body.click()
+  };
 
   const handleChangeColor = obj => {
      const currentColor = obj.rgb.split(".");
-     setColorValue(obj.value);
+     setValue(obj.value);
      setR(currentColor[0]);
      setG(currentColor[1]);
      setB(currentColor[2]);
-     setPopoverOpen(false);
+     handleClose();
   };
 
   const handleChangeSlider = (color, value) => {
@@ -61,56 +60,66 @@ const ColorPicker = function() {
     }
   };
 
+ const popoverSlider = (
+  <Popover
+    placement='bottom'
+    >
+      <Popover.Content className={styles.popover}>  
+        <SliderComponent 
+          color="R"
+          handleChange={handleChangeSlider}
+          data={R}
+        />
+        <SliderComponent 
+          color="G"
+          handleChange={handleChangeSlider}
+          data={G}
+        />
+        <SliderComponent 
+          color="B"
+          handleChange={handleChangeSlider}
+          data={B}
+        />
+        <div className={styles.popoverButtons}>
+          <Button onClick={handleClose} variant="secondary">CANCEL</Button>
+          <Button onClick={handleClose} variant="success">OK</Button>
+        </div>
+      </Popover.Content>
+  </Popover>
+ );
+
+ const popoverColor = (
+  <Popover
+    trigger="click"
+    placement='bottom'
+    target="arrow"
+    >
+      <Popover.Content className={styles.popover}>
+          {
+            colors.map(color => {
+              return (
+                <div key={color.value} className={styles.popoverColors} onClick={() => handleChangeColor(color)}>
+                  <div>{color.color}</div>
+                  <span style={{backgroundColor: color.value}}></span>
+                </div>
+              )
+            })
+          }
+      </Popover.Content>
+  </Popover>
+ );
+
   return(
       <>
         <div className={styles.picker}>
-            <div>{colorValue}</div>
+            <div>{value}</div>
             <div className={styles.blockButtons}>
-              <div id="color" className={styles.color} style={{backgroundColor: colorValue}}></div>
-                    <Popover
-                        trigger="click"
-                        placement='bottom'
-                        target="color"
-                        toggle={toggleOne}
-                        isOpen={popoverOneOpen} >
-                          <PopoverBody className={styles.popover}>  
-                            <SliderComponent 
-                              color="R"
-                              handleChange={handleChangeSlider}
-                              data={R}
-                            />
-                            <SliderComponent 
-                              color="G"
-                              handleChange={handleChangeSlider}
-                              data={G}
-                            />
-                            <SliderComponent 
-                              color="B"
-                              handleChange={handleChangeSlider}
-                              data={B}
-                            />
-                          </PopoverBody>
-                    </Popover>
+            <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={popoverSlider}>
+              <div className={styles.color} style={{backgroundColor: value}}></div>
+            </OverlayTrigger>
+              <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={popoverColor}>
                 <img src={arrrowIcon} id="arrow" alt="button" className={styles.popoverButton} />
-                  <Popover
-                    trigger="click"
-                    placement='bottom'
-                    target="arrow"
-                    toggle={toggle}
-                    isOpen={popoverOpen} >
-                      <PopoverBody className={styles.popover}>
-                          {
-                            colors.map(color => {
-                              return (
-                                <div key={color.value} className={styles.popoverColors} onClick={() => handleChangeColor(color)}>
-                                  <div>{color.color}</div>
-                                  <span style={{backgroundColor: color.value}}></span>
-                                </div>
-                              )
-                            })
-                          }
-                      </PopoverBody>
-                  </Popover>
+              </OverlayTrigger>
             </div>
         </div>
       </>

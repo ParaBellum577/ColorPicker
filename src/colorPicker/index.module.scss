@@ -23,6 +23,15 @@
     background: #fff;
     padding: 10px;
     border: 1px solid #8a9399;
+    .popoverButtons {
+        display: flex;
+        justify-content: flex-end;
+        > button {
+            height: 34px;
+            font-size: 13px;
+            margin-right: 10px;
+        }
+    }
 };
 .popoverButton {
     width: 20px;
